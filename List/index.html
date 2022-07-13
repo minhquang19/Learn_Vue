@@ -19,11 +19,11 @@
     <section id="user-goals">
       <h2>My course goals</h2>
       <input type="text" id="goal" v-model="enteredValue" />
-      <button class="addGoal" v-on:click="addGoals">Add Goal 1</button>
+      <button class="addGoal" v-on:click="addGoals">Add Goal</button>
       <p v-if="goals.length === 0">No goals have been added yet - please start adding some!</p>
-      <ul v-show="goals.length >0">
+      <ul v-else="goals.length >0">
         <li v-for="(goal,id) in goals">
-          {{ goal }}
+          <p>{{ goal }} - {{ id}}</p>
           <button class="removeBtn" v-on:click="removeGoal(id)">X</button>
         </li>
       </ul>

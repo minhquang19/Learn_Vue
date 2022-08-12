@@ -1,8 +1,9 @@
 <template>
   <li>
-    <h2>{{ name  }} {{ isFavorite ? '(Favorite)' : ''}}</h2>
+    <h2>{{ name }} {{ isFavorite ? "(favorite)" : "" }}</h2>
+    <button @click="toggleFavorite">Favorite</button>
     <button @click="toggleDetails">{{ detailsAreVisible ? 'Hide' : 'Show' }} Details</button>
-    <button @click="toggleFavorite"> Favorite</button>
+    <button @click="$emit('delete', id)">Delete</button>
     <ul v-if="detailsAreVisible">
       <li>
         <strong>Phone:</strong>
@@ -10,7 +11,7 @@
       </li>
       <li>
         <strong>Email:</strong>
-        {{ emailAddress }}
+        {{ email }}
       </li>
     </ul>
   </li>
@@ -18,46 +19,22 @@
 
 <script>
 export default {
-  props: {
-    name : {
-      type : String,
-      required : true,
-    },
-    phoneNumber : {
-      type : String,
-      required : true,
-    },
-    emailAddress : {
-      type : String,
-      required : true,
-    },
-    favorite : {
-      type : Boolean,
-      required : false,
-      default : false,
-      // validator : function(value) {
-      //   return value === '1' || value === '0';
-      // },
-    }
-  },
+  props: [
+    "name",
+    "phoneNumber",
+    "email",
+    "isFavorite",
+    "id"
+  ],
   data() {
     return {
-      friends: [
-        {
-          id: "manuel",
-          name: "Manuel Lorenz",
-          phone: "0123 45678 90",
-          email: "manuel@localhost.com",
-        },
-        {
-          id: "julie",
-          name: "Julie Jones",
-          phone: "0987 654421 21",
-          email: "julie@localhost.com",
-        },
-      ],
       detailsAreVisible: false,
-      isFavorite : this.favorite,
+      friend: {
+        id: "manuel",
+        name: "Manuel Lorenz",
+        phone: "0123 45678 90",
+        email: "manuel@localhost.com",
+      }
     };
   },
   methods: {
@@ -65,16 +42,14 @@ export default {
       this.detailsAreVisible = !this.detailsAreVisible;
     },
     toggleFavorite() {
-      this.isFavorite = !this.isFavorite;
+      this.$emit("toggle-favorite", this.id)
     }
   }
 };
 </script>
-<style>
-button {
-    border-radius: 5px;
-    padding: 10px;
-    margin-right: 5px;
-}
 
+<style>
+  button {
+    margin-right: 10px;
+  }
 </style>

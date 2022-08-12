@@ -3,27 +3,27 @@
     <header>
       <h1>My Friends</h1>
     </header>
+    <new-friend @add-contact="addContact"></new-friend>
     <ul>
       <friend-contact
         v-for="friend in friends"
         :key="friend.id"
+        :id="friend.id"
         :name="friend.name"
-        :phone-number="friend.phone"
-        :email-address="friend.email"
-        :favorite="true">
-      </friend-contact>
+        :phoneNumber="friend.phone"
+        :email="friend.email"
+        :isFavorite="friend.isFavorited"
+        @toggle-favorite="toggleFavorite"
+        @delete="deleteContact"
+      ></friend-contact>
     </ul>
   </section>
 </template>
 
 <script>
+import NewFriend from './components/NewFriend.vue';
 export default {
-  props: [
-    'name',
-    'phoneNumber',
-    'emailAddress',
-    'favorite'
-  ],
+  components: { NewFriend },
   data() {
     return {
       friends: [
@@ -32,15 +32,35 @@ export default {
           name: "Manuel Lorenz",
           phone: "0123 45678 90",
           email: "manuel@localhost.com",
+          isFavorited: true,
         },
         {
           id: "julie",
           name: "Julie Jones",
           phone: "0987 654421 21",
           email: "julie@localhost.com",
+          isFavorited: false,
         },
       ],
     };
+  },
+  methods: {
+    toggleFavorite(id) {
+      const indetifiedFriend = this.friends.find((friend) => friend.id == id);
+      indetifiedFriend.isFavorited = !indetifiedFriend.isFavorited;
+    },
+    addContact(name, phone, email) {
+      this.friends.unshift({
+        id: new Date().toISOString,
+        name: name,
+        phone: phone,
+        email: email,
+        isFavorited: false
+      })
+    },
+    deleteContact(id) {
+      this.friends = this.friends.filter(e => e.id != id);
+    }
   },
 };
 </script>
@@ -66,12 +86,27 @@ header {
   width: 90%;
   max-width: 40rem;
 }
+#app input {
+  font: inherit;
+  padding: 0.15rem;
+}
+#app label {
+  font-weight: bold;
+  margin-right: 1rem;
+  width: 7rem;
+  display: inline-block;
+}
+#app form div {
+  margin: 1rem 0;
+}
+
 #app ul {
   margin: 0;
   padding: 0;
   list-style: none;
 }
-#app li {
+#app li,
+#app form {
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.26);
   margin: 1rem auto;
   border-radius: 10px;

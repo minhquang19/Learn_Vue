@@ -8,6 +8,7 @@
 		<ul class="todo_list">
 			<todo-item 
 				@remove="remove"
+				@editTodo="editTodo"
 				v-for="todo in todos"
 				:key="todo.id"
 				:todo="todo">
@@ -25,18 +26,19 @@
 		data() {
 			return {
 				newTodo: '',
+				idForTodo: 3,
 				todos: [
 					{
 						'id': 1,
 						'title': 'Finish Vue ',
 						'completed': false,
-						'editing': false,
+						'isEdit': false,
 					},
 					{
 						'id': 2,
 						'title': 'Quangdz',
 						'completed': false,
-						'editing': false,
+						'isEdit': false,
 					},
 				]
 			}
@@ -49,12 +51,17 @@
 					completed: false,
 				})
 				this.newTodo = '';
+				this.idForTodo++;
 			},
 			remove(id) {
-				console.log(id);
 				const index = this.todos.findIndex((item) => item.id == id)
 				this.todos.splice(index, 1)
 			},
+			editTodo(id, title) {
+				const index = this.todos.findIndex((item) => item.id == id)
+				this.todos[index].title = title;
+				
+			}
 		},
 	};
 </script>

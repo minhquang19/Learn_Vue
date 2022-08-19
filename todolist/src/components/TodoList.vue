@@ -9,6 +9,7 @@
 			<todo-item 
 				@remove="remove"
 				@editTodo="editTodo"
+				@markCompleted="markCompleted"
 				v-for="todo in todos"
 				:key="todo.id"
 				:todo="todo">
@@ -16,31 +17,38 @@
 		</ul>
 		</div>
 	</div>
+
+	<ToDoCompleted :todo-prop="todos">
+        <template v-slot:title>
+			<h1 class="title">Completed List</h1>
+        </template>
+        <template #default="todoItem" >
+          <h4 v-if="todoItem.todoItem.completed"  class="completed"> {{ todoItem.todoItem.title }}</h4>
+        </template>
+    </ToDoCompleted>
+
+	<ToDoCompleted :todo-prop="todos">
+        <template v-slot:title>
+			<h1 class="title">InProgress List</h1>
+        </template>
+        <template #default="todoItem" >
+          <h4 v-if="!todoItem.todoItem.completed"  class="uncompleted"> {{ todoItem.todoItem.title }}</h4>
+        </template>
+    </ToDoCompleted>
 </template>
 <script>
-	import TodoItem from './TodoItem.vue'
+	import TodoItem from './TodoItem.vue';
+	import ToDoCompleted from './ToDoCompleted.vue';
 	export default {
 		components: {
-			TodoItem
+			TodoItem,
+			ToDoCompleted
 		},
 		data() {
 			return {
 				newTodo: '',
 				idForTodo: 3,
-				todos: [
-					{
-						'id': 1,
-						'title': 'Finish Vue ',
-						'completed': false,
-						'isEdit': false,
-					},
-					{
-						'id': 2,
-						'title': 'Quangdz',
-						'completed': false,
-						'isEdit': false,
-					},
-				]
+				todos: [],
 			}
 		},
 		methods: {
@@ -61,6 +69,10 @@
 				const index = this.todos.findIndex((item) => item.id == id)
 				this.todos[index].title = title;
 				
+			},
+			markCompleted(id) {
+				const index = this.todos.findIndex((item) => item.id == id)
+				this.todos[index].completed = !this.todos[index].completed;
 			}
 		},
 	};
@@ -86,7 +98,7 @@
 	.banner {
 		width: 100%;
 		height: 100px;
-		background-color: #f763ad;
+		background-color: yellow;
 		border : 1px solid #ccc;
 		height: 100px;
 		padding: 10px;
@@ -105,5 +117,24 @@
 		width: 400px;
 		margin: 0 auto;
 		background: white;
+	}
+	.completed{
+	background-color: green;
+	color: white;
+	padding: 20px;
+	border-radius: 5px;
+	margin-bottom: 10px;
+	text-align: center;
+	}
+	.uncompleted{
+	background-color: yellow;
+	color: black;
+	padding: 20px;
+	border-radius: 5px;
+	margin-bottom: 10px;
+	text-align: center;
+	}
+	.title{
+		margin: 30px;
 	}
 </style>

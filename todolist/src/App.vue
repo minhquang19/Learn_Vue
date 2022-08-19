@@ -2,18 +2,25 @@
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/all.min.css" integrity="sha512-KfkfwYDsLkIlwQp6LFnl8zNdLGxu9YAA1QvwINks4PhcElQSvqcyVLLD9aMhXd13uQjoXtEKNosOWaZqXgel0g==" crossorigin="anonymous" referrerpolicy="no-referrer" />
   <header class="page-header"></header>
     <section class="wrapper">
-      <todo-list></todo-list>
+      <todo-list :todos="todos"></todo-list>
     </section>
 </template>
 
 <script>
 import TodoList from './components/TodoList.vue'
 
+
 export default {
   name: 'App',
   components: {
-    TodoList
-  }
+    TodoList,
+
+},
+  data() {
+			return {
+				todos: []
+			}
+	},
 }
 </script>
 
@@ -41,4 +48,5 @@ input {
 	border: 1px solid #ccc;
 	padding: 8px 15px;
 }
+
 </style>
